@@ -1,26 +1,25 @@
 package com.ia.controller;
 
-import com.ia.dto.ChatRequestDTO;
-import com.ia.dto.ChatResponseDTO;
-import com.ia.service.ChatClientService;
+import com.ia.service.ChatBotService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1")
 public class ChatController {
 
-    private ChatClientService chatClientService;
-    public ChatController(ChatClientService chatClientService) {
-        this.chatClientService = chatClientService;
+    public ChatBotService chatBotService;
+
+    public ChatController(ChatBotService chatBotService){
+        this.chatBotService= chatBotService;
+
     }
 
-    @PostMapping("/chat")
-    public ResponseEntity<Object> chat(@RequestBody ChatRequestDTO request) {
-        String response = chatClientService.ask(request.message());
-        return ResponseEntity.ok(new ChatResponseDTO(response));
+    @GetMapping
+    public ResponseEntity<Object> chat(@RequestParam String message){
+        return ResponseEntity.ok(chatBotService.chat(message));
     }
 }
